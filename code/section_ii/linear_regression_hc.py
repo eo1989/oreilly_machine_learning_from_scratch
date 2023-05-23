@@ -23,8 +23,7 @@ n = float(len(points))  # Number of points
 
 best_loss = 10000000000000.0  # Initialize with a really large value
 
-for i in range(epochs):
-
+for _ in range(epochs):
     # Randomly adjust "m" or "b"
 
     m_adjust = np.random.normal()

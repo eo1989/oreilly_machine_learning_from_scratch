@@ -20,7 +20,9 @@ def distance_between(point1, point2):
 
 def closest_centroid_for(point):
     for c in centroids:
-        if distance_between(point, c) == min([distance_between(point, c2) for c2 in centroids]):
+        if distance_between(point, c) == min(
+            distance_between(point, c2) for c2 in centroids
+        ):
             return c
 
 
@@ -37,13 +39,14 @@ k = 4
 points = [(Point(row.x, row.y)) for index, row in pd.read_csv("https://tinyurl.com/y25lvxug").iterrows()]
 
 # Declare centroid objects
-centroids = [Point(np.random.uniform(0,10), np.random.uniform(0,10)) for i in range(k)]
+centroids = [
+    Point(np.random.uniform(0, 10), np.random.uniform(0, 10)) for _ in range(k)
+]
 
 # Move centroids for 1000 iterations using average technique
 best_loss = 1_000_000_000.0
 
-for i in range(1_000):
-
+for _ in range(1_000):
     for c in centroids:
 
         x_sum = 0.0
@@ -55,7 +58,7 @@ for i in range(1_000):
             x_sum += p.x
             y_sum += p.y
 
-        if len(clustered_points) > 0:
+        if clustered_points:
             c.x = x_sum / len(clustered_points)
             c.y = y_sum / len(clustered_points)
 

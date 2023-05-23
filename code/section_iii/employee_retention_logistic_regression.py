@@ -34,12 +34,10 @@ iterations = 50_000
 def predict_probability(sex, age, promotions, years_employed):
     x = b0 + (b1 * sex) + (b2 * age) + (b3 * promotions) + (b4 * years_employed)
     odds = exp(-x)
-    p = 1.0 / (1.0 + odds)
-    return p
+    return 1.0 / (1.0 + odds)
 
 
-for i in range(iterations):
-
+for _ in range(iterations):
     # Select b0, b1, b2, b3, or b4 randomly, and adjust it by a random amount
     random_b = random.choice(range(5))
 
@@ -64,11 +62,11 @@ for i in range(iterations):
 
         probability = predict_probability(emp.sex, emp.age, emp.promotions, emp.years_employed)
 
-        if emp.did_quit == 1:
-            new_likelihood += log(probability)
-        else:
-            new_likelihood += log(1.00001 - probability)
-
+        new_likelihood += (
+            log(probability)
+            if emp.did_quit == 1
+            else log(1.00001 - probability)
+        )
     # If solution improves, keep it and make it new best likelihood. Otherwise undo the adjustment
     if best_likelihood < new_likelihood:
         best_likelihood = new_likelihood

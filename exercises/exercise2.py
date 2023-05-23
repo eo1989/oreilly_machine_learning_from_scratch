@@ -98,10 +98,7 @@ print("BEST LIKELIHOOD: {0}".format(math.exp(best_likelihood)))
 
 # Interact and test with new colors
 def predict_font_shade(r, g, b):
-    if predict_probability(r, g, b) >= .5:
-        return "DARK"
-    else:
-        return "LIGHT"
+    return "DARK" if predict_probability(r, g, b) >= .5 else "LIGHT"
 
 
 while True:

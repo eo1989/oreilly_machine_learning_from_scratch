@@ -12,8 +12,7 @@ std_dev = 1.0
 mean = 1.0
 
 # randomly adjust mean and standard deviation using hill climbing
-for i in range(100_000):
-
+for _ in range(100_000):
     adj = random.normalvariate(0, 1)
     selected_variable = random.randint(0, 1)
 
@@ -23,7 +22,12 @@ for i in range(100_000):
         std_dev += adj
 
     # calculate the new likelihood
-    likelihood = math.exp(sum([math.log(.000000001 + normal_pdf(x, mean, std_dev)) for x in observations]))
+    likelihood = math.exp(
+        sum(
+            math.log(0.000000001 + normal_pdf(x, mean, std_dev))
+            for x in observations
+        )
+    )
 
     # if likelihood improves, keep it
     if likelihood > best_likelihood:

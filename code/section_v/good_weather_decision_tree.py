@@ -47,9 +47,9 @@ def gini_impurity_for_split(feature, split_value, samples):
 
 
 def split_continuous_variable(feature, samples):
-    feature_values = list(set(feature.value_extractor(weather_item) for weather_item in samples))
-    feature_values.sort()
-
+    feature_values = sorted(
+        {feature.value_extractor(weather_item) for weather_item in samples}
+    )
     feature_values2 = feature_values.copy()
     feature_values2.pop(0)
 
@@ -84,15 +84,20 @@ class TreeLeaf:
         print(self)
         feature_value = self.feature.value_extractor(weather_item)
         if feature_value >= self.split_value:
-            if self.feature_positive_leaf is None:
-                return sum(1 for e in self.feature_positive_items if e.good_weather_ind == 1) / len(self.feature_positive_items)
-            else:
-                return self.feature_positive_leaf.predict(weather_item)
+            return (
+                sum(
+                    1
+                    for e in self.feature_positive_items
+                    if e.good_weather_ind == 1
+                )
+                / len(self.feature_positive_items)
+                if self.feature_positive_leaf is None
+                else self.feature_positive_leaf.predict(weather_item)
+            )
+        if self.feature_negative_leaf is None:
+            return sum(1 for e in self.feature_negative_items if e.good_weather_ind == 1) / len(self.feature_negative_items)
         else:
-            if self.feature_negative_leaf is None:
-                return sum(1 for e in self.feature_negative_items if e.good_weather_ind == 1) / len(self.feature_negative_items)
-            else:
-                return self.feature_negative_leaf.predict(weather_item)
+            return self.feature_negative_leaf.predict(weather_item)
 
     def __str__(self):
         return "{0} split on {1}, {3}|{2}, Impurity: {4}|{5}, Weighted Impurity: {6}".format(self.feature, self.split_value,

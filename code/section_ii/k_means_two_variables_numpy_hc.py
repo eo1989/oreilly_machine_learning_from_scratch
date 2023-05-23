@@ -12,8 +12,7 @@ centroids = np.zeros(k*2, dtype='float').reshape([4,2])
 
 best_loss = 1_000_000_000.0
 
-for i in range(100_000):
-
+for _ in range(100_000):
     random_centroid = np.random.randint(0,k)
 
     random_xy_adjust = np.zeros(k*2).reshape([4,2])

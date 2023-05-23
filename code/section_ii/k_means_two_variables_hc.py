@@ -22,7 +22,9 @@ def distance_between(point1, point2):
 # Retrieve closest centroid for given point
 def closest_centroid_for(point):
     for c in centroids:
-        if distance_between(point, c) == min([distance_between(point, c2) for c2 in centroids]):
+        if distance_between(point, c) == min(
+            distance_between(point, c2) for c2 in centroids
+        ):
             return c
 
 
@@ -39,12 +41,12 @@ k = 4
 points = [(Point(row.x, row.y)) for index, row in pd.read_csv("https://tinyurl.com/y25lvxug").iterrows()]
 
 # Declare centroids
-centroids = [Point(0, 0) for i in range(k)]
+centroids = [Point(0, 0) for _ in range(k)]
 
 # Randomly move centroids, keep moves that reduce loss which will converge on a solution
 best_loss = 1_000_000_000.0
 
-for i in range(200_000):
+for _ in range(200_000):
     random_centroid = random.choice(centroids)
 
     random_x_adjust = np.random.standard_normal()

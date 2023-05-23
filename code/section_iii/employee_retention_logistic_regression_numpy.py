@@ -23,8 +23,7 @@ best_likelihood = -100_000_000_000.0
 betas = np.array([1.0,1.0,1.0,1.0,1.0])
 
 # calculate maximum likelihood
-for i in range(iterations):
-
+for _ in range(iterations):
     # Select b0, b1, b2, b3, or b4 randomly, and adjust it by a random amount
     random_b = random.choice(range(5))
     random_adjust = np.random.standard_normal()
@@ -56,8 +55,7 @@ print("BEST LIKELIHOOD: {0}".format(np.math.exp(best_likelihood)))
 def predict_probability(sex, age, promotions, years_employed):
     x = -(betas[0] + (betas[1] * sex) + (betas[2] * age) + (betas[3] * promotions) + (betas[4] * years_employed))
     odds = np.math.exp(x)
-    p = 1.0 / (1.0 + odds)
-    return p
+    return 1.0 / (1.0 + odds)
 
 
 def predict_employee_will_stay(sex, age, promotions, years_employed):

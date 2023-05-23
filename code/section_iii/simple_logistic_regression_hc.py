@@ -26,12 +26,10 @@ b1 = .01
 # calculate maximum likelihood
 
 def predict_probability(x):
-    p = 1.0 / (1.0001 + math.exp(-(b0 + b1 * x)))
-    return p
+    return 1.0 / (1.0001 + math.exp(-(b0 + b1 * x)))
 
 
-for i in range(1_000_000):
-
+for _ in range(1_000_000):
     # Select b0 or b1 randomly, and adjust it randomly
     random_b = random.choice(range(2))
 
