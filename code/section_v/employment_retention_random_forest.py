@@ -54,9 +54,9 @@ def gini_impurity_for_split(feature, split_value, sample_employees):
 
 
 def split_continuous_variable(feature, sample_employees):
-    feature_values = list(set(feature.value_extractor(employee) for employee in sample_employees))
-    feature_values.sort()
-
+    feature_values = sorted(
+        {feature.value_extractor(employee) for employee in sample_employees}
+    )
     feature_values2 = feature_values.copy()
     feature_values2.pop(0)
 
@@ -91,17 +91,17 @@ class TreeLeaf:
     def predict(self, employee):
         feature_value = self.feature.value_extractor(employee)
         if feature_value >= self.split_value:
-            if self.feature_positive_leaf is None:
-                return sum(1 for e in self.feature_positive_employees if e.did_quit == 1) / len(
-                    self.feature_positive_employees)
-            else:
-                return self.feature_positive_leaf.predict(employee)
+            return (
+                sum(1 for e in self.feature_positive_employees if e.did_quit == 1)
+                / len(self.feature_positive_employees)
+                if self.feature_positive_leaf is None
+                else self.feature_positive_leaf.predict(employee)
+            )
+        if self.feature_negative_leaf is None:
+            return sum(1 for e in self.feature_negative_employees if e.did_quit == 1) / len(
+                self.feature_negative_employees)
         else:
-            if self.feature_negative_leaf is None:
-                return sum(1 for e in self.feature_negative_employees if e.did_quit == 1) / len(
-                    self.feature_negative_employees)
-            else:
-                return self.feature_negative_leaf.predict(employee)
+            return self.feature_negative_leaf.predict(employee)
 
     def __str__(self):
         return "{0} split on {1}, {3}|{2}, Impurity: {4}".format(self.feature, self.split_value,
@@ -141,8 +141,15 @@ def build_leaf(sample_employees, previous_leaf=None, random_feature_count=None):
         return None
 
 
-random_forest = [build_leaf(sample_employees=random.sample(all_employees, int(len(all_employees) * (2 / 3))),
-                            random_feature_count=random.choice(range(2, 3))) for i in range(1, 300)]
+random_forest = [
+    build_leaf(
+        sample_employees=random.sample(
+            all_employees, int(len(all_employees) * (2 / 3))
+        ),
+        random_feature_count=random.choice(range(2, 3)),
+    )
+    for _ in range(1, 300)
+]
 
 
 # Interact and test with new employee data

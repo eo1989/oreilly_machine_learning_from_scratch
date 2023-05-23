@@ -26,13 +26,11 @@ betas = np.array([1.0,1.0])
 # calculate maximum likelihood
 
 def predict_probability(x):
-    p = 1.0 / (1.0 + math.exp(-(betas[0] + betas[1] * x)))
-    return p
+    return 1.0 / (1.0 + math.exp(-(betas[0] + betas[1] * x)))
 
 
 # calculate maximum likelihood
-for i in range(iterations):
-
+for _ in range(iterations):
     # Select b0 or b1 randomly, and adjust it by a random amount
     random_b = random.choice(range(2))
     random_adjust = np.random.standard_normal()

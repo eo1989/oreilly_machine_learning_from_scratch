@@ -46,8 +46,7 @@ best_loss = 10_000_000_000
 # Hill-climbing may or may not produce a good result, and we need to learn
 # techniques like simulated annealing and stochastic gradient descent 
 # which is covered in another online training "Intro to Mathematical Optimization"
-for i in range(1_000_000):
-
+for _ in range(1_000_000):
     # 20 hyper-parameters to randomly select from
     # Each parameter needs to be uniformly likely to be selected
     # So we will use some random number strategies to
@@ -133,16 +132,17 @@ for i in range(1_000_000):
 # Interact and test with new colors
 def predict_probability(r, g, b):
     input_colors = np.array([r, g, b]).transpose() / 255
-    output = softmax(output_bias + output_weights.dot(tanh(middle_bias + middle_weights.dot(input_colors))))
-    return output
+    return softmax(
+        output_bias
+        + output_weights.dot(
+            tanh(middle_bias + middle_weights.dot(input_colors))
+        )
+    )
 
 
 def predict_font_shade(r, g, b):
     output_values = predict_probability(r, g, b)
-    if output_values[0, 0] > output_values[1, 0]:
-        return "DARK"
-    else:
-        return "LIGHT"
+    return "DARK" if output_values[0, 0] > output_values[1, 0] else "LIGHT"
 
 
 while True:

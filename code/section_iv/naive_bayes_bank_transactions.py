@@ -16,7 +16,7 @@ class BankTransaction:
 bank_transactions = [(BankTransaction(row[0], row[1], row[2], row[3])) for index, row in
                      pd.read_csv("https://tinyurl.com/yy38e9jj").iterrows()]
 
-categories = set(bt.category for bt in bank_transactions)
+categories = {bt.category for bt in bank_transactions}
 
 
 # Helper function to break up words from a string

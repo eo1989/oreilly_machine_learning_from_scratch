@@ -19,8 +19,7 @@ n = float(len(X))  # Number of elements in X
 
 best_loss = 10000000000000.0  # Initialize with a really large value
 
-for i in range(epochs):
-
+for _ in range(epochs):
     # Randomly adjust "m" or "b"
 
     m_adjust = np.random.standard_t(3, 1)[0] #or use normalvariate(0, 1)

@@ -49,9 +49,9 @@ def gini_impurity_for_feature(feature, split_value, sample_colors):
 
 
 def split_continuous_variable(feature, sample_colors):
-    feature_values = list(set(feature.value_extractor(color) for color in sample_colors))
-    feature_values.sort()
-
+    feature_values = sorted(
+        {feature.value_extractor(color) for color in sample_colors}
+    )
     feature_values2 = feature_values.copy()
     feature_values2.pop(0)
 
@@ -86,16 +86,17 @@ class TreeLeaf:
     def predict(self, color):
         print(self)
         feature_value = self.feature.value_extractor(color)
-        if feature_value >= self.split_value:
-            if self.positive_leaf is None:
-                return len(self.dark_colors) / len(self.sample_colors)
-            else:
-                return self.positive_leaf.predict(color)
+        if (
+            feature_value >= self.split_value
+            and self.positive_leaf is None
+            or feature_value < self.split_value
+            and self.negative_leaf is None
+        ):
+            return len(self.dark_colors) / len(self.sample_colors)
+        elif feature_value >= self.split_value:
+            return self.positive_leaf.predict(color)
         else:
-            if self.negative_leaf is None:
-                return len(self.dark_colors) / len(self.sample_colors)
-            else:
-                return self.negative_leaf.predict(color)
+            return self.negative_leaf.predict(color)
 
     def __str__(self):
         return "{0} split on {1}, {2}|{3}, Impurity: {4}".format(self.feature, self.split_value,

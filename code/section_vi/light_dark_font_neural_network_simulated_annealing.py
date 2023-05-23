@@ -48,8 +48,7 @@ temperature = 120.0
 decrement = temperature / epochs
 new_loss = 1_000_000_000.0
 
-for i in range(epochs):
-
+for _ in range(epochs):
     temperature -= decrement
     current_loss = new_loss
 
@@ -163,16 +162,17 @@ output_bias = best_output_bias
 # Interact and test with new colors
 def predict_probability(r, g, b):
     input_colors = np.array([r, g, b]).transpose() / 255
-    output = logistic(output_bias + output_weights.dot(softplus(middle_bias + middle_weights.dot(input_colors))))
-    return output
+    return logistic(
+        output_bias
+        + output_weights.dot(
+            softplus(middle_bias + middle_weights.dot(input_colors))
+        )
+    )
 
 
 def predict_font_shade(r, g, b):
     output_values = predict_probability(r, g, b)
-    if output_values[0, 0] > output_values[1, 0]:
-        return "DARK"
-    else:
-        return "LIGHT"
+    return "DARK" if output_values[0, 0] > output_values[1, 0] else "LIGHT"
 
 
 while True:

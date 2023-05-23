@@ -46,12 +46,10 @@ iterations = 1_000
 def predict_probability(red, green, blue):
     x = -(b0 + (b1 * red) + (b2 * green) + (b3 * blue))
     odds = exp(x)
-    p = 1.0 / (1.0 + odds)
-    return p
+    return 1.0 / (1.0 + odds)
 
 
-for i in range(iterations):
-
+for _ in range(iterations):
     # Select b0, b1, b2, or b3 randomly, and adjust it by a random amount
     random_b = random.choice(range(4))
 
@@ -74,11 +72,11 @@ for i in range(iterations):
 
         probability = predict_probability(c.red, c.green, c.blue)
 
-        if c.dark_font_ind == 1:
-            new_likelihood += log(probability)
-        else:
-            new_likelihood += log(1.0 - probability)
-
+        new_likelihood += (
+            log(probability)
+            if c.dark_font_ind == 1
+            else log(1.0 - probability)
+        )
     # If solution improves, keep it and make it new best likelihood. Otherwise undo the adjustment
     if best_likelihood < new_likelihood:
         best_likelihood = new_likelihood
@@ -98,10 +96,7 @@ print("BEST LIKELIHOOD: {0}".format(math.exp(best_likelihood)))
 
 # Interact and test with new colors
 def predict_font_shade(r, g, b):
-    if predict_probability(r, g, b) >= .5:
-        return "DARK"
-    else:
-        return "LIGHT"
+    return "DARK" if predict_probability(r, g, b) >= .5 else "LIGHT"
 
 
 while True:

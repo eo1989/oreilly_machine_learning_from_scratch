@@ -10,7 +10,7 @@ def f(x):
 
 data = pd.DataFrame(columns=["x", "y"])
 
-for i in range(1000):
+for _ in range(1000):
     x = round(uniform(1, 20), 2)
     data = data.append(pd.DataFrame(columns=["x", "y"], data=[[x, round(f(x) + normalvariate(0, 50), 2)]]))
 
@@ -40,9 +40,9 @@ for i in range(epochs):
 
     if change_var_index == 1:
         a += adjust
-    if change_var_index == 2:
+    elif change_var_index == 2:
         b += adjust
-    if change_var_index == 3:
+    elif change_var_index == 3:
         c += adjust
 
     # Calculate loss, which is total mean squared error
@@ -51,13 +51,12 @@ for i in range(epochs):
     # If loss has improved, keep new values. Otherwise revert.
     if new_loss < best_loss:
         best_loss = new_loss
-    else:
-        if change_var_index == 1:
-            a -= adjust
-        if change_var_index == 2:
-            b -= adjust
-        if change_var_index == 3:
-            c -= adjust
+    elif change_var_index == 1:
+        a -= adjust
+    elif change_var_index == 2:
+        b -= adjust
+    elif change_var_index == 3:
+        c -= adjust
 
     if i % 1000 == 0:
         print(a, b, c)

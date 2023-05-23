@@ -27,8 +27,7 @@ n = float(len(points))  # Number of points
 
 best_loss = 10000000000000.0  # Initialize with a really large value
 
-for i in range(epochs):
-
+for _ in range(epochs):
     # Randomly adjust b0, b1, or b2
 
     random_b = random.choice(range(3))
@@ -51,12 +50,11 @@ for i in range(epochs):
     if new_loss < best_loss:
         print("z = {0} + {1}x + {2}y".format(b0, b1, b2))
         best_loss = new_loss
-    else:
-        if random_b == 0:
-            b0 -= random_adjust
-        elif random_b == 1:
-            b1 -= random_adjust
-        elif random_b == 2:
-            b2 -= random_adjust
+    elif random_b == 0:
+        b0 -= random_adjust
+    elif random_b == 1:
+        b1 -= random_adjust
+    elif random_b == 2:
+        b2 -= random_adjust
 
 print("z = {0} + {1}x + {2}y".format(b0, b1, b2))

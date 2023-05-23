@@ -10,7 +10,7 @@ def f(x):
 
 data = pd.DataFrame(columns=["x", "y"])
 
-for i in range(1000):
+for _ in range(1000):
     x = round(uniform(1, 20), 2)
     data = data.append(pd.DataFrame(columns=["x", "y"], data=[[x, round(f(x) + normalvariate(0, 50), 2)]]))
 

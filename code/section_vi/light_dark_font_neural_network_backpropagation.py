@@ -55,8 +55,7 @@ def backward_prop(Z1, A1, Z2, A2, X, Y):
     return dW1, db1, dW2, db2
 
 # Execute gradient descent
-for i in range(100_000):
-
+for _ in range(100_000):
     # randomly select part of the training data
     idx = np.random.choice(n, sample_size, replace=False)
     X_sample = X_train[idx].transpose()
@@ -91,10 +90,7 @@ def predict_probability(r, g, b):
 
 def predict_font_shade(r, g, b):
     output_values = predict_probability(r, g, b)
-    if output_values > .5:
-        return "DARK"
-    else:
-        return "LIGHT"
+    return "DARK" if output_values > .5 else "LIGHT"
 
 while True:
     col_input = input("Predict light or dark font. Input values R,G,B: ")
